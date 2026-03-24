@@ -33,6 +33,5 @@ src/
 include/
 └── bit.h          # Constants and data structures (MAXLOCI=10, MAXHAPS=1024)
 
-run_mongrail.sh    # Wrapper script for running Mongrail 2.0 on VCF inputs
 Makefile           # Build configuration
 ```
