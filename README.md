@@ -50,7 +50,18 @@ All simulations are run across 4 parameter combinations:
 
 ## Naming Convention
 
-`c20_m10_rX_hY_au1_hcZ` encodes: 20 chromosomes, 10 markers, recombination rate X, Y haplotypes, admixture uniformity 1, haplotype concentration Z.
+Filenames follow the pattern `c20_m10_rX_hY_au1_hcZ`:
+
+| Code | Parameter | Meaning |
+|---|---|---|
+| `c20` | 20 chromosomes | Number of simulated chromosomes |
+| `m10` | 10 markers | Number of biallelic markers per chromosome |
+| `rX` | Recombination rate | Marker spacing in cM (1 or 50) |
+| `hY` | Haplotypes | Number of distinct haplotypes per chromosome (5 or 15) |
+| `au1` | α = 1 | Dirichlet symmetry parameter for haplotype frequencies |
+| `hc0.1` | c = 0.1 | Switch rate for haplotype allelic configurations (p = c/L) |
+
+Haplotype configurations are generated using a switching process that flips adjacent allele states, mimicking recombination along the chromosome. Haplotype frequencies follow a symmetric Dirichlet distribution with parameter α.
 
 ## Prerequisites
 
