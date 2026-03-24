@@ -1,0 +1,26 @@
+# Generated intermediate files
+*.countA_rep*
+*.countB_rep*
+*.sim_i*
+*.m2out_i*
+*.postMeanA_rep*
+*.postMeanB_rep*
+
+# Working directories
+panels/
+individuals/
+results/
+figures/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Editor
+*~
+*.swp
