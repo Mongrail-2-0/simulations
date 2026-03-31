@@ -59,7 +59,7 @@ Filenames follow the pattern `c20_m10_rX_hY_au1_hcZ`:
 | `rX` | Recombination rate | Marker spacing in cM (1 or 50) |
 | `hY` | Haplotypes | Number of distinct haplotypes per chromosome (5 or 15) |
 | `au1` | α = 1 | Dirichlet symmetry parameter for haplotype frequencies |
-| `hc0.1` | c = 0.1 | Switch rate for haplotype allelic configurations (p = c/L) |
+| `hc0.1` | c = 0.1 | Switch rate for haplotype allelic configurations (p = c/m10) |
 
 Haplotype configurations are generated using a switching process that flips adjacent allele states, mimicking recombination along the chromosome. Haplotype frequencies follow a symmetric Dirichlet distribution with parameter α.
 
@@ -72,5 +72,10 @@ Haplotype configurations are generated using a switching process that flips adja
 ## Citation
 
 ```
-[Your citation here]
+If you use MONGRAIL in your research, please cite:
+
+Sneha Chakraborty, Bruce Rannala. 2025. Improved Bayesian inference of hybrids using genome sequences. bioRxiv 2025.12.26.696621; doi: https://doi.org/10.64898/2025.12.26.69662
+
+Sneha Chakraborty, Bruce Rannala. 2023. An efficient exact algorithm for identifying hybrids using population genomic sequences, Genetics 223:4, iyad011, https://doi.org/10.1093/genetics/iyad011
+
 ```
