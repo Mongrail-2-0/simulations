@@ -71,11 +71,9 @@ Haplotype configurations are generated using a switching process that flips adja
 
 ## Citation
 
-```
 If you use MONGRAIL in your research, please cite:
 
 Sneha Chakraborty, Bruce Rannala. 2025. Improved Bayesian inference of hybrids using genome sequences. bioRxiv 2025.12.26.696621; doi: https://doi.org/10.64898/2025.12.26.69662
 
 Sneha Chakraborty, Bruce Rannala. 2023. An efficient exact algorithm for identifying hybrids using population genomic sequences, Genetics 223:4, iyad011, https://doi.org/10.1093/genetics/iyad011
 
-```
