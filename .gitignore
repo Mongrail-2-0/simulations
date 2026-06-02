@@ -5,6 +5,7 @@
 *.m2out_i*
 *.postMeanA_rep*
 *.postMeanB_rep*
+*.out_i*
 
 # Working directories
 panels/
