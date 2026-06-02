@@ -4,15 +4,14 @@ Reproducibility materials for the simulation studies in the Mongrail 2.0 paper.
 
 ## Software
 
-The simulations were run with a **development version** of Mongrail 2.0. The source code for that version is in `src/`. The current release has undergone significant modifications since these simulations were conducted.
+The simulations were run with a **development version** of Mongrail and Mongrail 2.0. The source code for those versions is in `src/`. The current release has undergone significant modifications since these simulations were conducted.
 
 ```bash
-cd src/mongrail2/
-# [build instructions]
-
-cd src/mongrail/
-# [build instructions]
+cd src/mongrail/ && make    # builds: mongrail, gendiplo
+cd src/mongrail2/ && make   # builds: mongrail2, gendiplo
 ```
+
+Requires gcc and glib-2.0. On Ubuntu/Debian: `sudo apt install build-essential libglib2.0-dev pkg-config`
 
 ## Repository Layout
 
@@ -23,6 +22,7 @@ simulations/
 │   ├── chrom_files/                 # Chromosome definitions (r=1, r=50)
 │   ├── pop_files/                   # Population haplotype frequencies (h=5, h=15)
 │   ├── sim_files/                   # Simulated individuals (4 parameter combos)
+│   ├── mongrail_output/             # Original Mongrail outputs (known frequencies)
 │   └── model_specified_10000.txt    # True model labels for 10,000 individuals
 ├── src/
 │   ├── mongrail/                    # Original Mongrail source (paper version)
@@ -33,9 +33,9 @@ simulations/
 
 ## Simulation Studies
 
-**Study 1:** Compares Mongrail 2.0 (sampled reference panels at N=10, 100, 1000) against original Mongrail (known frequencies). See [`simulation_study_1/README.md`](simulation_study_1/README.md).
+**Study 1:** Compares Mongrail 2.0 (sampled reference panels at N=10, 100, 1000) against original Mongrail (known frequencies). Output: stacked barplots of posterior model probabilities. See [`simulation_study_1/README.md`](simulation_study_1/README.md).
 
-**Study 2:** Compares Mongrail 2.0 against a plug-in approach where posterior mean frequencies are estimated from counts and passed to original Mongrail. See [`simulation_study_2/README.md`](simulation_study_2/README.md).
+**Study 2:** Compares Mongrail 2.0 against a plug-in approach where posterior mean frequencies are estimated from counts and passed to original Mongrail as if they were known. Output: AUC comparison across all models, sample sizes, recombination rates, and haplotype counts. See [`simulation_study_2/README.md`](simulation_study_2/README.md).
 
 ## Parameter Combinations
 
@@ -65,9 +65,11 @@ Haplotype configurations are generated using a switching process that flips adja
 
 ## Prerequisites
 
-- R (≥ 4.0) with: `ggplot2`, `ggh4x`, `RColorBrewer`, `reshape`, `ggpubr`, `pROC`, `lemon`
-- Bash with awk/sed
-- Compiled binaries from `src/`
+- C compiler (gcc) with glib-2.0 (see Software section above)
+- R (≥ 4.0) with packages:
+  - Study 1: `ggplot2`, `ggh4x`, `RColorBrewer`, `reshape`, `ggpubr`
+  - Study 2: `ggplot2`, `pROC`
+- Bash with awk/sed (standard Linux)
 
 ## Citation
 
@@ -76,4 +78,3 @@ If you use MONGRAIL in your research, please cite:
 Sneha Chakraborty, Bruce Rannala. 2025. Improved Bayesian inference of hybrids using genome sequences. bioRxiv 2025.12.26.696621; doi: https://doi.org/10.64898/2025.12.26.69662
 
 Sneha Chakraborty, Bruce Rannala. 2023. An efficient exact algorithm for identifying hybrids using population genomic sequences, Genetics 223:4, iyad011, https://doi.org/10.1093/genetics/iyad011
-
