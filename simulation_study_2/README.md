@@ -2,7 +2,16 @@
 
 Compares Mongrail 2.0 against a "plug-in" approach: compute posterior mean haplotype frequencies from the sampled counts, then run the original Mongrail using those estimated frequencies as if they were known. The comparison is quantified using AUC across all six hybridization models.
 
-**Prerequisite:** Run Simulation Study 1 first to generate the count files and per-individual sim files.
+> **To run everything in one command (after Study 1):** `./run_study2.sh`
+> Runs all 4 combinations across all three sample sizes and writes the AUC
+> figure + table to `figures/`. Requires Study 1 to have been run first.
+
+**Prerequisite — run Study 1 first, for all combos and all N.** This study
+   reads the following Study 1 working directories (created by run_study1.sh):
+   - `../simulation_study_1/individuals/`   (per-individual .sim files)
+   - `../simulation_study_1/panels/N{10,100,1000}/`   (count files)
+   - `../simulation_study_1/results/`   (.m2out_N* — read by plot_auc.R)
+   If these are absent, Study 2 will fail mid-run.
 
 ## Pipeline
 
@@ -47,7 +56,21 @@ Produces: `posterior_means/c20_m10_r50_h5_au1_hc0.1.postMeanA_rep{1..10000}` (an
 
 Produces: `results/c20_m10_r50_h5_au1_hc0.1.out_N1000`
 
-Run for each sample size (N=10, 100, 1000) and each parameter combination.
+**Run Steps 1–2 together, for all sample sizes:**
+( the .postMean files are NOT tagged by N and the scripts append, so they
+  must be interleaved per N — not all of Step 1 then all of Step 2 )
+
+```bash
+for N in 10 100 1000; do
+  rm -f ./posterior_means/c20_m10_r50_h5_au1_hc0.1.postMean*_rep*
+  ./compute_posterior_means.sh 50 5 $N 10000 \
+      ../simulation_study_1/individuals/ ../simulation_study_1/panels/N$N/ \
+      ./posterior_means/ ./awk_scripts/
+  ./run_inference_plugin.sh 50 5 $N 10000 100 \
+      ../src/mongrail/mongrail ../data/chrom_files ./posterior_means/ \
+      ../simulation_study_1/individuals/ ./results/
+done
+```
 
 ### Step 3: AUC comparison
 

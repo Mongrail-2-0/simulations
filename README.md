@@ -2,6 +2,18 @@
 
 Reproducibility materials for the simulation studies in the Mongrail 2.0 paper.
 
+## Quick Start
+
+       sudo apt install build-essential libglib2.0-dev pkg-config   # prerequisites
+       ./build.sh                                                   # compile both binaries
+
+       ./simulation_study_1/run_study1.sh                           # Study 1 (all combos, all N)
+       ./simulation_study_2/run_study2.sh                           # Study 2 (requires Study 1 first)
+
+   Each master script runs every parameter combination and every sample size
+   (N = 10, 100, 1000) end-to-end and writes figures to the study's `figures/`
+   directory. They are the single entry points for reproducing each study.
+
 ## Software
 
 The simulations were run with a **development version** of Mongrail and Mongrail 2.0. The source code for those versions is in `src/`. The current release has undergone significant modifications since these simulations were conducted.
@@ -21,6 +33,9 @@ Requires gcc and glib-2.0. On Ubuntu/Debian: `sudo apt install build-essential l
   - Study 2: `ggplot2`, `pROC`
 - Bash with awk/sed (standard Linux)
 
+
+Re-running a study re-creates its working directories; for a clean reproduction, delete `panels/`, `individuals/`, `results/`, `posterior_means/`, and `figures/` first (all are gitignored).
+
 ## Repository Layout
 
 ```
@@ -30,7 +45,6 @@ simulations/
 │   ├── chrom_files/                 # Chromosome definitions (r=1, r=50)
 │   ├── pop_files/                   # Population haplotype frequencies (h=5, h=15)
 │   ├── sim_files/                   # Simulated individuals (4 parameter combos)
-│   ├── mongrail_output/             # Original Mongrail outputs (known frequencies)
 │   └── model_specified_10000.txt    # True model labels for 10,000 individuals
 ├── src/
 │   ├── mongrail/                    # Original Mongrail source (paper version)
