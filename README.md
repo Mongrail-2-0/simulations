@@ -13,6 +13,14 @@ cd src/mongrail2/ && make   # builds: mongrail2, gendiplo
 
 Requires gcc and glib-2.0. On Ubuntu/Debian: `sudo apt install build-essential libglib2.0-dev pkg-config`
 
+## Prerequisites
+
+- C compiler (gcc) with glib-2.0 (see Software section above)
+- R (≥ 4.0) with packages:
+  - Study 1: `ggplot2`, `ggh4x`, `RColorBrewer`, `reshape`, `ggpubr`
+  - Study 2: `ggplot2`, `pROC`
+- Bash with awk/sed (standard Linux)
+
 ## Repository Layout
 
 ```
@@ -62,14 +70,6 @@ Filenames follow the pattern `c20_m10_rX_hY_au1_hcZ`:
 | `hc0.1` | c = 0.1 | Switch rate for haplotype allelic configurations (p = c/m10) |
 
 Haplotype configurations are generated using a switching process that flips adjacent allele states, mimicking recombination along the chromosome. Haplotype frequencies follow a symmetric Dirichlet distribution with parameter α.
-
-## Prerequisites
-
-- C compiler (gcc) with glib-2.0 (see Software section above)
-- R (≥ 4.0) with packages:
-  - Study 1: `ggplot2`, `ggh4x`, `RColorBrewer`, `reshape`, `ggpubr`
-  - Study 2: `ggplot2`, `pROC`
-- Bash with awk/sed (standard Linux)
 
 ## Citation
 
