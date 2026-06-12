@@ -2,6 +2,27 @@
 
 Reproducibility materials for the simulation studies in the Mongrail 2.0 paper.
 
+## Download
+
+The recommended way to download this repository is to clone it with Git:
+
+```bash
+git clone https://github.com/Mongrail-2-0/simulations.git
+cd simulations
+```
+
+This is the best option if you want to run the simulations, inspect the files, modify the code, or update the repository later using `git pull`.
+
+If you do not use Git, click the green **Code** button on the GitHub repository page and select **Download ZIP**. After unzipping the downloaded file, open a terminal in the extracted folder and continue with the Quick Start instructions below.
+
+A `.tar.gz` archive of the current `main` branch can also be downloaded directly:
+
+```text
+https://github.com/Mongrail-2-0/simulations/archive/refs/heads/main.tar.gz
+```
+
+A tagged release will be added after the repository has been checked and finalized. Once a release is available, users who want a stable, reproducible version should download the release archive from the **Releases** page rather than downloading the current `main` branch.
+
 ## Quick Start
 
 ```bash
