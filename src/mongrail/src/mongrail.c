@@ -1403,8 +1403,12 @@ void model_inference(int individual_index, double *Q_array, unsigned int no_ance
       double scale_c, first_term_c, second_term_c;
       first_term_c = (log_p1_a + log_p2_d);
       second_term_c = (log_p1_d + log_p2_a);
-      scale_c = fabs(fmax(first_term_c, second_term_c))-0.5;
-      indv_log_prob[2] = log(exp(first_term_c + scale_c) + exp(second_term_c + scale_c))-scale_c;
+      if (first_term_c == -INFINITY && second_term_c == -INFINITY) {
+        indv_log_prob[2] = -INFINITY;
+      } else {
+        scale_c = fabs(fmax(first_term_c, second_term_c))-0.5;
+        indv_log_prob[2] = log(exp(first_term_c + scale_c) + exp(second_term_c + scale_c))-scale_c;
+      }
 
       double recombinant_haplotype_log_probability_1, recombinant_haplotype_log_probability_2;
       recombinant_haplotype_log_probability_1 = recom_hap_log_prob(data_node->haplotype_1[individual_index],
@@ -1418,16 +1422,24 @@ void model_inference(int individual_index, double *Q_array, unsigned int no_ance
       double scale_e, first_term_e, second_term_e;
       first_term_e = (log_p1_a + recombinant_haplotype_log_probability_2);
       second_term_e = (log_p2_a + recombinant_haplotype_log_probability_1);
-      scale_e = fabs(fmax(first_term_e, second_term_e))-0.5;
-      indv_log_prob[4] = log(exp(first_term_e + scale_e) + exp(second_term_e + scale_e))-scale_e;
+      if (first_term_e == -INFINITY && second_term_e == -INFINITY) {
+        indv_log_prob[4] = -INFINITY;
+      } else {
+        scale_e = fabs(fmax(first_term_e, second_term_e))-0.5;
+        indv_log_prob[4] = log(exp(first_term_e + scale_e) + exp(second_term_e + scale_e))-scale_e;
+      }
 
 
       /* Likelihood calculation under model B */
       double scale_b, first_term_b, second_term_b;
       first_term_b = (log_p1_d + recombinant_haplotype_log_probability_2);
       second_term_b = (log_p2_d + recombinant_haplotype_log_probability_1);
-      scale_b = fabs(fmax(first_term_b, second_term_b))-0.5;
-      indv_log_prob[1] = log(exp(first_term_b + scale_b) + exp(second_term_b + scale_b))-scale_b;
+      if (first_term_b == -INFINITY && second_term_b == -INFINITY) {
+        indv_log_prob[1] = -INFINITY;
+      } else {
+        scale_b = fabs(fmax(first_term_b, second_term_b))-0.5;
+        indv_log_prob[1] = log(exp(first_term_b + scale_b) + exp(second_term_b + scale_b))-scale_b;
+      }
 
       /* Likelihood calculation under model F */
       indv_log_prob[5] = (log(2) + recombinant_haplotype_log_probability_1 + recombinant_haplotype_log_probability_2);

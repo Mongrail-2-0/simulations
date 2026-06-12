@@ -1068,10 +1068,13 @@ double Q(unsigned int ancestry_state, double **inter_marker_prob_change, unsigne
   log_Q_0 = Q_component(0, ancestry_state, inter_marker_prob_change, n_loci, pi_0);
   log_Q_1 = Q_component(1, ancestry_state, inter_marker_prob_change, n_loci, pi_1);
   double scale;
-  scale = fabs(fmax(log_Q_0,log_Q_1)) - 0.5;
-  
   double log_Q;
-  log_Q = log(exp(log_Q_0 + scale) + exp(log_Q_1 + scale)) - scale;
+  if (log_Q_0 == -INFINITY && log_Q_1 == -INFINITY) {
+    log_Q = -INFINITY;
+  } else {
+    scale = fabs(fmax(log_Q_0,log_Q_1)) - 0.5;
+    log_Q = log(exp(log_Q_0 + scale) + exp(log_Q_1 + scale)) - scale;
+  }
   return(log_Q);
   
 }
@@ -1571,8 +1574,12 @@ double p_model(chrom_data* node, unsigned int hap1, unsigned int hap2, unsigned 
 
 
 	  double scale_b;       /* scaling factors to avoid underflows */
-	  scale_b = fabs(fmax(term1_b, term2_b)) - 0.5;
-	  value = log(exp(term1_b + scale_b) + exp(term2_b + scale_b)) - scale_b;
+	  if (term1_b == -INFINITY && term2_b == -INFINITY) {
+	    value = -INFINITY;
+	  } else {
+	    scale_b = fabs(fmax(term1_b, term2_b)) - 0.5;
+	    value = log(exp(term1_b + scale_b) + exp(term2_b + scale_b)) - scale_b;
+	  }
 	}
 
       /* printf("Model (b): %lf\n\n", value); */
@@ -1666,8 +1673,12 @@ double p_model(chrom_data* node, unsigned int hap1, unsigned int hap2, unsigned 
 
       
 	  double scale;
-	  scale = fabs(fmax(term1, term2)) - 0.5;
-	  value = log(exp(term1 + scale) + exp(term2 + scale)) - scale;
+	  if (term1 == -INFINITY && term2 == -INFINITY) {
+	    value = -INFINITY;
+	  } else {
+	    scale = fabs(fmax(term1, term2)) - 0.5;
+	    value = log(exp(term1 + scale) + exp(term2 + scale)) - scale;
+	  }
 	}
 
       /* printf("Model (c): %lf\n\n", value); */
@@ -1776,8 +1787,12 @@ double p_model(chrom_data* node, unsigned int hap1, unsigned int hap2, unsigned 
 	  /* term2_e = p_prob(hashB_copy) + recom_prob(hap1, node); */
 
 	  double scale_e;
-	  scale_e = fabs(fmax(term1_e, term2_e)) - 0.5;
-	  value = log(exp(term1_e + scale_e) + exp(term2_e + scale_e)) - scale_e;
+	  if (term1_e == -INFINITY && term2_e == -INFINITY) {
+	    value = -INFINITY;
+	  } else {
+	    scale_e = fabs(fmax(term1_e, term2_e)) - 0.5;
+	    value = log(exp(term1_e + scale_e) + exp(term2_e + scale_e)) - scale_e;
+	  }
 	}
 
       /* printf("Model (e): %lf\n\n", value); */
