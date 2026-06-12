@@ -112,4 +112,9 @@ for rep in $(seq 1 ${n_replicate}); do
     fi
 done
 
+# Remove per-individual temp files now that they are concatenated into the
+# combined output. (On a failed run, set -e exits before here, so the temps
+# are left in place for debugging.)
+rm -f "${output_dir}/${sim_parameters}.m2out_i"*
+
 echo "Done. Final output: ${final_output}"
