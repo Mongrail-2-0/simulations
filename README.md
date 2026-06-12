@@ -32,8 +32,22 @@ Plotting is intentionally separate from inference, so the (slow) inference can r
 on a machine without the R graphics stack and figures can be made afterwards from
 the output files on any machine with R.
 
+<!--
 **Runtime:** one parameter combination takes approximately **[TODO: ~X on Y cores]**;
 the full set is four combinations. Set parallelism with `THREADS=<n>`.
+-->
+
+## Prerequisites
+
+- C compiler (gcc) with glib-2.0 (see Software section above)
+- R (≥ 4.0) with packages:
+  - Study 1: `ggplot2`, `ggh4x`, `RColorBrewer`, `reshape`, `ggpubr`
+  - Study 2: `ggplot2`, `pROC`
+- Bash with awk/sed (standard Linux)
+
+Re-running a study re-creates its working directories; for a clean reproduction,
+delete `panels/`, `individuals/`, `results/`, `posterior_means/`, and `figures/`
+first (all are gitignored).
 
 ## Software
 
@@ -49,18 +63,6 @@ cd src/mongrail2/ && make   # builds: mongrail2, gendiplo
 ```
 
 Requires gcc and glib-2.0. On Ubuntu/Debian: `sudo apt install build-essential libglib2.0-dev pkg-config`
-
-## Prerequisites
-
-- C compiler (gcc) with glib-2.0 (see Software section above)
-- R (≥ 4.0) with packages:
-  - Study 1: `ggplot2`, `ggh4x`, `RColorBrewer`, `reshape`, `ggpubr`
-  - Study 2: `ggplot2`, `pROC`
-- Bash with awk/sed (standard Linux)
-
-Re-running a study re-creates its working directories; for a clean reproduction,
-delete `panels/`, `individuals/`, `results/`, `posterior_means/`, and `figures/`
-first (all are gitignored).
 
 ## Repository Layout
 
@@ -133,3 +135,20 @@ If you use MONGRAIL in your research, please cite:
 Sneha Chakraborty, Bruce Rannala. 2025. Improved Bayesian inference of hybrids using genome sequences. bioRxiv 2025.12.26.696621; doi: https://doi.org/10.64898/2025.12.26.69662
 
 Sneha Chakraborty, Bruce Rannala. 2023. An efficient exact algorithm for identifying hybrids using population genomic sequences, Genetics 223:4, iyad011, https://doi.org/10.1093/genetics/iyad011
+
+## Disclaimer — this repository is for reproducibility only
+
+This repository exists **solely to reproduce the simulation studies** in the paper.
+The code in `src/` is the development version of Mongrail and Mongrail 2.0 used to
+generate those results; it is frozen at the paper's state and is **not** maintained
+for general use.
+
+**To run Mongrail on your own data, use the current, maintained release:**
+
+**→ https://github.com/mongrail/mongrail2**
+
+The maintained software provides pre-built binaries and has been substantially
+revised since these simulations were conducted; see that repository for installation
+instructions, supported input formats, and the current version. Outputs from this
+reproducibility repository are not expected to match the current release
+version-for-version.
