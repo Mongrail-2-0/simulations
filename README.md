@@ -10,8 +10,9 @@ The recommended way to download this repository is to clone it with Git:
 git clone https://github.com/Mongrail-2-0/simulations.git
 cd simulations
 ```
-
+<!--
 This is the best option if you want to run the simulations, inspect the files, modify the code, or update the repository later using `git pull`.
+-->
 
 If you do not use Git, click the green **Code** button on the GitHub repository page and select **Download ZIP**. After unzipping the downloaded file, open a terminal in the extracted folder and continue with the Quick Start instructions below.
 
@@ -20,14 +21,15 @@ A `.tar.gz` archive of the current `main` branch can also be downloaded directly
 ```text
 https://github.com/Mongrail-2-0/simulations/archive/refs/heads/main.tar.gz
 ```
-
+<!--
 A tagged release will be added after the repository has been checked and finalized. Once a release is available, users who want a stable, reproducible version should download the release archive from the **Releases** page rather than downloading the current `main` branch.
+-->
 
 ## Quick Start
 
 ```bash
 # 1. Prerequisites + build (once)
-sudo apt install build-essential libglib2.0-dev pkg-config
+sudo apt install build-essential libglib2.0-dev pkg-config	# Debian/Ubuntu Linux
 ./build.sh                              # compiles mongrail + mongrail2
 
 # 2. Quick check that everything runs (~1–2 min, a handful of individuals)
@@ -58,9 +60,38 @@ the output files on any machine with R.
 the full set is four combinations. Set parallelism with `THREADS=<n>`.
 -->
 
+### Smoke test
+
+`./smoke_test.sh` is a quick check that the whole pipeline runs end to end — a
+*plumbing test*, not a scientific run. It runs one parameter combination with only
+a handful of individuals (so it finishes in ~1–2 minutes), through both studies and
+all three sample sizes (N = 10, 100, 1000), and reports whether every expected
+output file was produced.
+
+```bash
+./smoke_test.sh             # default: combo r1_h5, 5 individuals
+./smoke_test.sh 50 5        # a different combo (r50_h5)
+./smoke_test.sh 1 5 20      # combo r1_h5 with 20 individuals
+```
+
+Arguments: `./smoke_test.sh [recom_freq] [n_hap] [n_individuals]`.
+
+- It does **not** modify `data/`. It writes a small truncated sim file into a
+  temporary directory and runs against that, so it is safe even if `data/` is
+  read-only.
+- It produces **no figures** — it only verifies the inference output files appear
+  in each study's `results/` directory.
+- It cleans up after itself: the temporary data and the working directories it
+  creates (`individuals/`, `panels/`, `results/`, `posterior_means/`) are removed
+  on exit, so it leaves no artifacts behind.
+
+A handful of individuals is enough to confirm the pipeline runs, but too few to
+produce meaningful figures — for real results, use `run_all_study1.sh` /
+`run_all_study2.sh` (see each study's README).
+
 ## Prerequisites
 
-- C compiler (gcc) with glib-2.0 (see Software section above)
+- C compiler (gcc) with glib-2.0 (see Software section below)
 - R (≥ 4.0) with packages:
   - Study 1: `ggplot2`, `ggh4x`, `RColorBrewer`, `reshape`, `ggpubr`
   - Study 2: `ggplot2`, `pROC`

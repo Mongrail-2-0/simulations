@@ -40,7 +40,7 @@ SAMPLE_SIZES="10 100 1000"   # reference-panel sample sizes (scientific N; alway
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
-DATA="$ROOT/data"
+DATA="${DATA_DIR:-$ROOT/data}"   # override with DATA_DIR for testing (e.g. smoke_test.sh)
 M1="$ROOT/src/mongrail/mongrail"
 M2="$ROOT/src/mongrail2/mongrail2"
 sp="c20_m10_r${r}_h${h}_au1_hc0.1"
@@ -49,6 +49,13 @@ pop="c20_m10_h${h}_au1_hc0.1"
 mkdir -p "$HERE/individuals" "$HERE/panels" "$HERE/results"
 [ -x "$M1" ] || { echo "ERROR: $M1 missing — run ../build.sh first" >&2; exit 1; }
 [ -x "$M2" ] || { echo "ERROR: $M2 missing — run ../build.sh first" >&2; exit 1; }
+
+# Clean THIS combo's prior outputs so the run is independent of whatever ran
+# before (a smoke test, another combo, or an interrupted run). Per-combo only:
+# other combos' files are left intact, so run_all_study1.sh accumulates all four.
+rm -f "$HERE/individuals/${sp}.sim_i"*
+rm -f "$HERE/results/${sp}.out" "$HERE/results/${sp}.m2out_N"*
+rm -f "$HERE/panels"/N*/"${pop}.count"*_rep*
 
 echo "## Study 1 — combo r=$r h=$h ($sp)"
 

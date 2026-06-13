@@ -35,7 +35,7 @@ SAMPLE_SIZES="10 100 1000"   # reference-panel sample sizes (scientific N; alway
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
-DATA="$ROOT/data"
+DATA="${DATA_DIR:-$ROOT/data}"   # override with DATA_DIR for testing (e.g. smoke_test.sh)
 M1="$ROOT/src/mongrail/mongrail"
 S1="$ROOT/simulation_study_1"
 sp="c20_m10_r${r}_h${h}_au1_hc0.1"
@@ -43,6 +43,10 @@ sp="c20_m10_r${r}_h${h}_au1_hc0.1"
 mkdir -p "$HERE/posterior_means" "$HERE/results"
 [ -x "$M1" ]              || { echo "ERROR: $M1 missing — run ../build.sh first" >&2; exit 1; }
 [ -d "$S1/individuals" ] || { echo "ERROR: $S1/individuals missing — run Study 1 first" >&2; exit 1; }
+
+# Clean THIS combo's prior outputs (per-combo only, same rationale as Study 1).
+rm -f "$HERE/results/${sp}.out_N"*
+rm -f "$HERE/posterior_means/${sp}.postMean"*
 
 echo "## Study 2 — combo r=$r h=$h ($sp)"
 

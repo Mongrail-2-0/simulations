@@ -7,8 +7,9 @@
 # the expected output files were produced. It still runs all three real
 # reference-panel sample sizes (N = 10, 100, 1000) through the workhorse.
 #
-# It temporarily truncates one sim file and ALWAYS restores it afterward
-# (even if the run fails).
+# It does NOT modify your real data files. It builds a temporary data directory
+# (real reference files symlinked, a truncated sim written into temp) and points
+# the run scripts at it with DATA_DIR. Safe even if data/ is read-only.
 #
 #   ./smoke_test.sh             # default: combo r1_h5, 5 individuals
 #   ./smoke_test.sh 50 5        # combo r50_h5, 5 individuals
@@ -23,30 +24,39 @@ set -euo pipefail
 R="${1:-1}"; H="${2:-5}"; N_IND="${3:-5}"   # combo + number of test individuals
 SP="c20_m10_r${R}_h${H}_au1_hc0.1"
 HERE="$(cd "$(dirname "$0")" && pwd)"
-SIM="$HERE/data/sim_files/${SP}.sim"
+REALDATA="$HERE/data"
+SIM="$REALDATA/sim_files/${SP}.sim"
 
 [ -x "$HERE/src/mongrail/mongrail"   ] || { echo "Build first: ./build.sh"; exit 1; }
 [ -x "$HERE/src/mongrail2/mongrail2" ] || { echo "Build first: ./build.sh"; exit 1; }
 [ -f "$SIM" ] || { echo "No sim file for combo r$R h$H: $SIM"; exit 1; }
 
-# always restore the real sim file, even on failure
-BACKUP="$(mktemp)"
-cleanup() { cp "$BACKUP" "$SIM"; rm -f "$BACKUP"; echo "[smoke] restored $(basename "$SIM")"; }
+# Temporary data dir — cleaned up on exit. Real data is never written to.
+TMPDATA="$(mktemp -d)"
+cleanup() {
+    rm -rf "$TMPDATA"
+    # remove the throwaway working dirs this test created, so it leaves no trace
+    rm -rf "$HERE/simulation_study_1/individuals" "$HERE/simulation_study_1/panels" "$HERE/simulation_study_1/results"
+    rm -rf "$HERE/simulation_study_2/posterior_means" "$HERE/simulation_study_2/results"
+}
 trap cleanup EXIT
 
-echo "[smoke] combo r=$R h=$H, $N_IND individuals (plumbing test only)"
+mkdir -p "$TMPDATA/sim_files"
+ln -s "$REALDATA/chrom_files" "$TMPDATA/chrom_files"   # symlink (read-only is fine)
+ln -s "$REALDATA/pop_files"   "$TMPDATA/pop_files"
+# truncated sim written into TEMP (reading the real file works even if read-only)
+awk -v n=$((N_IND+1)) '{printf "%s",$1; for(i=2;i<=n;i++) printf " %s",$i; printf "\n"}' \
+    "$SIM" > "$TMPDATA/sim_files/${SP}.sim"
 
-# truncate the sim to N_IND individuals (position column + N_IND columns)
-cp "$SIM" "$BACKUP"
-awk -v n=$((N_IND+1)) '{printf "%s",$1; for(i=2;i<=n;i++) printf " %s",$i; printf "\n"}' "$BACKUP" > "$SIM"
+echo "[smoke] combo r=$R h=$H, $N_IND individuals (plumbing test; real data untouched)"
 
 # clean working dirs so we test from scratch
 rm -rf "$HERE/simulation_study_1/individuals" "$HERE/simulation_study_1/panels" "$HERE/simulation_study_1/results"
 rm -rf "$HERE/simulation_study_2/posterior_means" "$HERE/simulation_study_2/results"
 
-# run both studies for this one combo, few individuals, 2 threads
-( cd "$HERE/simulation_study_1" && N_REPLICATE=$N_IND THREADS=2 ./run_study1.sh "$R" "$H" )
-( cd "$HERE/simulation_study_2" && N_REPLICATE=$N_IND THREADS=2 ./run_study2.sh "$R" "$H" )
+# run both studies against the temp data dir, few individuals, 2 threads
+( cd "$HERE/simulation_study_1" && DATA_DIR="$TMPDATA" N_REPLICATE=$N_IND THREADS=2 ./run_study1.sh "$R" "$H" )
+( cd "$HERE/simulation_study_2" && DATA_DIR="$TMPDATA" N_REPLICATE=$N_IND THREADS=2 ./run_study2.sh "$R" "$H" )
 
 # verify the expected output files exist
 echo "[smoke] checking outputs:"
